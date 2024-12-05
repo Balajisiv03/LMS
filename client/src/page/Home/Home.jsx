@@ -19,7 +19,7 @@ function Home() {
         </div>
         <div className="flex flex-col items-center text-center bg-gray-100 h-80 my-10">
             <h2 className="text-3xl font-semibold my-14">
-                We collaborate with <span className="text-blue-500">350+ leading universities and companies</span>
+                We collaborated with <span className="text-blue-500">350+ leading universities and companies</span>
             </h2>
             <div className="flex flex-wrap justify-center gap-10 mb-20">
                 <img src="https://d3njjcbhbojbot.cloudfront.net/api/utilities/v1/imageproxy/https://images.ctfassets.net/wp1lcwdav1p1/77hmeEJo3ZPlURCU02fD52/aa37b7f7b52285ba350acac62d8af5c1/illinois-3.png?auto=format%2Ccompress&dpr=1&h=32" alt="Logo 1" className="h-16 max-h-8 " />
