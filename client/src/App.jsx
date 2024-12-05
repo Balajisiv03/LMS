@@ -1,14 +1,19 @@
-import "./App.css";
+import { BrowserRouter} from "react-router-dom"
+import AllRouter from "./route";
+import {ToastContainer} from "react-toastify";
+import Navbar from "./components/Navbar/Navbar";
 
 function App() {
   return (
-    <>
-      {" "}
-      <h1 className="text-3xl font-bold underline text-red-500">
-        Hello world!
-      </h1>
-    </>
-  );
+    <div >
+      <BrowserRouter>
+          <Navbar/>
+          <AllRouter/>
+      </BrowserRouter>
+      <ToastContainer theme='light'/>
+    </div>
+    
+  )
 }
 
-export default App;
+export default App
