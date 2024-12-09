@@ -54,9 +54,9 @@ const Certifications=()=> {
               className='h-40 w-full object-cover mb-4 rounded-t-xl' 
             />
             <p className='text-lg font-bold text-left ml-4  mr-6 leading-5'>{item.Certification_Name}</p>
-            <p className='text-slate-500 mx-4 absolute mt-[205px]'>{item.Certification_Author}</p>
-            <p className='font-semibold mx-4 absolute mt-60'>&#x20B9; {item.Certification_Price}<span className='ml-3  text-slate-400 line-through'>{item.Certification_Price*7}</span></p>
-            <p className='text-slate-400 mx-4 text-base  absolute mt-72'>Professional Course</p>
+            <p className='text-slate-500 mx-4 '>{item.Certification_Author}</p>
+            <p className='font-semibold mx-4'>&#x20B9; {item.Certification_Price}<span className='ml-3  text-slate-400 line-through'>{item.Certification_Price*7}</span></p>
+            <p className='text-slate-400 mx-4 text-base  '>Professional Course</p>
         </div>
 
         ))}
