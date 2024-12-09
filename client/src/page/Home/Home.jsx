@@ -5,18 +5,23 @@ import Footer from '../../components/Footer/footer'
 
 function Home() {
   return (
-    <div className='min-h-screen mt-10 w-full  items-center justify-center flex-col'>
-        <div className='flex '>
-            <div className='absolute justify-center items-center flex flex-row lg:mt-36 mt-[450px] gap-2 z-20 lg:mx-20 mx-40 ' >
-                <div className='  '>
-                    <button className='text-xl border-2 border-sky-800 lg:px-8 px-14 py-5 hover:bg-slate-100 duration-300'>Join for Free</button>
-                </div>
-                <div className='lg:ml-[950px] ml-0'>
-                    <button className='text-xl  bg-sky-800 border-2 border-sky-800  px-8 py-5 text-white hover:bg-sky-900 duration-300'>Try EduNext now</button>
-                </div>
+    <div className=" mt-10 w-full  items-center justify-center relative">
+        <div className='flex flex-col'>
+            <div className="absolute top-0 left-0 flex gap-2 z-10 p-6 lg:mt-28 mt-96">
+                <button className="text-xl border-2 border-sky-800 px-8 py-5 hover:bg-slate-200 duration-300">
+                Join for Free
+                </button>
             </div>
-            <GlobeDemo className="cursor-pointer -z-50  sm:hidden lg:block"/>
+            <div className="absolute top-0 right-0 flex gap-2 z-10 p-6 lg:mt-28 mt-96">
+                <button className="text-xl bg-sky-800 border-2 border-sky-800 px-8 py-5 text-white hover:bg-sky-900 duration-300">
+                Try EduNext now
+                </button>
+            </div>
+
+            <GlobeDemo className="cursor-pointer -z-50 " />
+
         </div>
+        
         <div className="flex flex-col items-center text-center bg-gray-100 h-80 my-10">
             <h2 className="text-3xl font-semibold my-14">
                 We collaborated with <span className="text-blue-500">350+ leading universities and companies</span>

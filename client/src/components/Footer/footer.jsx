@@ -134,7 +134,7 @@ return(
         </div>
 
         <div>
-          <p className="font-medium text-gray-900">About GoBus</p>
+          <p className="font-medium text-gray-900">About EduNext</p>
 
           <ul className="mt-6 space-y-4 text-sm">
           {about?.map((item,key)=>(
@@ -177,7 +177,7 @@ return(
       </div>
     </div>
 
-    <p className="text-xs text-gray-500">&copy; 2024. EduBus. Designed by Aravinth PM & Danny Devito L .</p>
+    <p className="text-xs text-gray-500">&copy; 2024. EduBus.<br/> <span className="text-sm font-bold">Developed & Designed by <br/>Balaji S, Aravinth PM & Danny Devito L .</span></p>
   </div>
 </footer>
 )
