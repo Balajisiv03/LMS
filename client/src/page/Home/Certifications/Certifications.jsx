@@ -45,7 +45,7 @@ const Certifications=()=> {
       <p className='text-lg font-medium'>Specializations and Professional Certificates</p>
       <p className='lg:text-5xl text-4xl lg:my-4 my-2'>Most Popular Certificates</p>
       <p className='lg:text-xl text-lg'>Explore our most popular programs, get job-ready for an in-demand career.</p>
-      <div className='mt-10 flex gap-8'>
+      <div className='mt-10 lg:flex md:flex grid  gap-8'>
         {certifications.map((item)=>(
           <div className='border  border-slate-300 h-80 w-80 flex flex-col items-start rounded-xl cursor-pointer hover:scale-105 hover:shadow-xl duration-500'>
             <img 
