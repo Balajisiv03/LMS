@@ -1,12 +1,20 @@
+/* eslint-disable no-unused-vars */
 import { useState ,useEffect} from "react";
 import Footer from "../../components/Footer/footer";
+import { useParams  , useLocation } from "react-router-dom";
+
 
 const Course = () => {
+  const { id } = useParams();
+  const location = useLocation();
   const [openSections, setOpenSections] = useState({});
   const [scrollPosition, setScrollPosition] = useState(0);
   const [isVisible, setIsVisible] =useState(true);
   const [hasPurchased, setHasPurchased] = useState(false);
-  const [videoProgress, setVideoProgress] = useState({}); 
+  const [videoProgress, setVideoProgress] = useState({});
+
+  const certifications = location.state?.certifications || [];
+
 
   const toggleSection = (section) => {
     if (!hasPurchased && section !== "Introduction") {
@@ -48,6 +56,8 @@ const Course = () => {
   }, [scrollPosition]);
 
 
+
+
   const courseContent = [
     { title: "Introduction",
       description:"In this first week, we will look at how to identify a target audience using personas, design active learning opportunities into your course, and write with a clear narrative voice that will appeal to a global audience",
@@ -67,16 +77,19 @@ const Course = () => {
       videoUrl: "https://videos.pexels.com/video-files/5474318/5474318-uhd_2732_1440_25fps.mp4" ,
       
     }
-    ];
+  ]; 
 
-  // Video by cottonbro studio from Pexels: 
+  const courseData = certifications.find((cert) => cert.Certification_Url === String(id));
+  if (!courseData) {
+    return <div>Course not found</div>;
+  }
   return (
     <div className="bg-white text-black  h-screen ">
       
       <header className={ `  bg-slate-200 py-9 w-full px-40 fixed duration-300 z-10  ${isVisible ? "translate-y-0 -mt-48" : "-translate-y-full -mt-40"}`}>
-        <h1 className=" text-black/80   text-xl md:text-3xl font-bold text-black ">Simple Strategy for Swing Trading</h1>
+        <h1 className=" text-black/80   text-xl md:text-3xl font-bold text-black ">{courseData?.Certification_Name || "Course Name"}</h1>
         <p className="text-gray-400  ">
-          Use my favorite Technical Indicator and Trading Strategy for Swing Trading Stocks
+        {courseData?.Certification_Author || "Course Auther"}
         </p>
       </header>
      
@@ -187,7 +200,7 @@ Digital education is expanding faster than ever as part of how we teach.</h3>
         {/* Right Section */}
         <aside className="md:w-1/3  px-4">
           <div className="bg-slate-100/80 border border-b-slate-200  p-10 rounded-lg text-center">
-            <p className="text-xl font-bold text-black ">₹1,799</p>
+            <p className="text-xl font-bold text-black ">₹{courseData?.Certification_Price || "3000" } <span className="ml-3  text-slate-400 line-through cursor-not-allowed">{courseData?.Certification_Price*5||"3000"*5}</span></p>
             <button className="bg-purple-600 text-white px-4 py-2 rounded mt-4 w-full hover:bg-purple-700">
               Add to Cart
             </button>
