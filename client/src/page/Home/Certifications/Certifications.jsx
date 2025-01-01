@@ -45,6 +45,7 @@ const Certifications=()=> {
 
     const handleRedirect = (certId) => {
       navigate(`/course/${certId}`, { state: { certifications } });
+      console.log(certId);
       
     };
 
