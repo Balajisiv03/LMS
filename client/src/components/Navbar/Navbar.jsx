@@ -19,6 +19,7 @@ const Navbar = () => {
   const navItems = [
     { name: "Home", link: "/" },
     { name: "About", link: "/about" },
+    { name: "Instructor", link: "/instructor" },
     { name: "Courses", link: "/course" },
     { name: "Careers", link: "/careers" },
   ];
@@ -54,6 +55,28 @@ const Navbar = () => {
     };
   }, []);
 
+  useEffect(() => {
+    const handleScroll = () => {
+      const currentScrollPosition = window.scrollY;
+      if (currentScrollPosition > scrollPosition && currentScrollPosition > 50) {
+        setIsVisible(false); // Hide navbar when scrolling down
+      } else {
+        setIsVisible(true); // Show navbar when scrolling up
+      }
+
+     
+      if (isDropdownOpen) {
+        setIsDropdownOpen(false);
+      }
+
+      setScrollPosition(currentScrollPosition);
+    };
+    window.addEventListener("scroll", handleScroll);
+    return () => {
+      window.removeEventListener("scroll", handleScroll);
+    };
+  }, [scrollPosition, isDropdownOpen]);
+
   const { user } = useClerk();
   console.log(user);
 
@@ -83,6 +106,7 @@ const Navbar = () => {
                 alt="user photo"
               />
             </button>
+            
 
             {isDropdownOpen && user && (
               <div
