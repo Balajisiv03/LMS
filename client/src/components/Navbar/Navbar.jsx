@@ -92,7 +92,7 @@ const Navbar = () => {
           </span>
         </a>
         <div className="flex items-center md:order-2 space-x-3 md:space-x-0 rtl:space-x-reverse">
-          <div className="relative" ref={dropdownRef}>
+          <div className="relative flex" ref={dropdownRef}>
             <button
               type="button"
               className="flex text-sm bg-gray-800 rounded-full focus:ring-4 focus:ring-gray-600"
@@ -107,15 +107,16 @@ const Navbar = () => {
               />
             </button>
             
+            
 
             {isDropdownOpen && user && (
               <div
-                className="absolute right-0 mt-2 w-48 bg-gray-700 text-white rounded-lg shadow-lg"
+                className="absolute top-8 mt-2 w-48 bg-gray-700 text-white rounded-lg shadow-lg"
                 id="user-dropdown"
               >
                 <div className="px-4 py-3">
                   <span className="block text-sm font-medium">
-                    {user.fullName}
+                    {user.fullName === null ? user.username: user.fullName} 
                   </span>
                   <span className="block text-sm text-gray-400">
                     {user.emailAddresses[0].emailAddress}
@@ -142,6 +143,11 @@ const Navbar = () => {
 
           {!user && (
             <SignInButton className="text-white md:hover:text-blue-500 pl-3" />
+          )}
+          {user && (
+            <div className="px-4 py-3  text-sm  text-white ">
+              {user.fullName === null ? user.username: user.fullName} 
+            </div>
           )}
 
           <button
