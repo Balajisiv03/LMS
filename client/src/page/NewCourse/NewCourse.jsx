@@ -9,7 +9,7 @@ import { useClerk } from "@clerk/clerk-react";
 const MultiStepCourseForm = () => {
   
   //User Details
-  const { user } = useClerk();
+  const { user  } = useClerk();
   
   const date = new Date();
 
@@ -24,7 +24,7 @@ const MultiStepCourseForm = () => {
       Course_skills:"",
       Course_description: "",
       Course_sections: [{ module_Title : "", module_Desc : "" , module_VideoUrl : "" }],
-      AuthorName : user.fullName || user.username || "UnKnown User",
+      AuthorName : user.fullName || user.username || "UnKnownUser",
       PublishedDate : date.toLocaleDateString()
       
     },
