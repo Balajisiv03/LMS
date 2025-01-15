@@ -1,11 +1,12 @@
-
-import { useState ,useEffect} from "react";
+import { useState, useEffect, useRef } from "react";
+import { SignInButton, SignOutButton, useClerk } from "@clerk/clerk-react";
 
 const Navbar = () => {
   const [isDropdownOpen, setIsDropdownOpen] = useState(false);
   const [isMobileMenuOpen, setIsMobileMenuOpen] = useState(false);
   const [scrollPosition, setScrollPosition] = useState(0);
   const [isVisible, setIsVisible] = useState(true);
+  const dropdownRef = useRef(null);
 
   const toggleDropdown = () => {
     setIsDropdownOpen((prev) => !prev);
@@ -16,10 +17,13 @@ const Navbar = () => {
   };
 
   const navItems = [
-    {name:"Home",link:"/"}, {name:"About",link:"/about"},{ name:"Courses",link:"/course"},{ name:"Careers",link:"/careers"}
+    { name: "Home", link: "/" },
+    { name: "About", link: "/about" },
+    { name: "Instructor", link: "/instructor" },
+    { name: "Courses", link: "/course" },
+    { name: "Careers", link: "/careers" },
   ];
-  const userItems = ["Dashboard", "Settings", "My Learning", "Sign out"];
-
+  const userItems = ["Dashboard", "Settings", "My Learning"];
 
   useEffect(() => {
     const handleScroll = () => {
@@ -38,53 +42,114 @@ const Navbar = () => {
     };
   }, [scrollPosition]);
 
+  useEffect(() => {
+    const handleClickOutside = (event) => {
+      if (dropdownRef.current && !dropdownRef.current.contains(event.target)) {
+        setIsDropdownOpen(false); 
+      }
+    };
+
+    document.addEventListener("mousedown", handleClickOutside);
+    return () => {
+      document.removeEventListener("mousedown", handleClickOutside);
+    };
+  }, []);
+
+  useEffect(() => {
+    const handleScroll = () => {
+      const currentScrollPosition = window.scrollY;
+      if (currentScrollPosition > scrollPosition && currentScrollPosition > 50) {
+        setIsVisible(false); // Hide navbar when scrolling down
+      } else {
+        setIsVisible(true); // Show navbar when scrolling up
+      }
+
+     
+      if (isDropdownOpen) {
+        setIsDropdownOpen(false);
+      }
+
+      setScrollPosition(currentScrollPosition);
+    };
+    window.addEventListener("scroll", handleScroll);
+    return () => {
+      window.removeEventListener("scroll", handleScroll);
+    };
+  }, [scrollPosition, isDropdownOpen]);
+
+  const { user } = useClerk();
+  console.log(user);
+
   return (
-    <nav className={`w-full h-[10ch] fixed top-0 left-0 lg:px-24 md:px-16 sm:px-7 px-4 backdrop-blur-xl transition-transform ease-in-out duration-300 z-50 
-      ${isVisible ? "translate-y-0" : "-translate-y-full"} bg-gray-800`}>
-      <div className=" max-w-screen-xl flex flex-wrap items-center justify-between mx-auto p-8">
+    <nav
+      className={`w-full h-[10ch] fixed top-0 left-0 lg:px-24 md:px-16 sm:px-7 px-4 backdrop-blur-xl transition-transform ease-in-out duration-300 z-50 
+      ${isVisible ? "translate-y-0" : "-translate-y-full"} bg-gray-800`}
+    >
+      <div className="max-w-screen-xl flex flex-wrap items-center justify-between mx-auto p-8">
         <a href="/" className="flex items-center space-x-3 ">
-          
-          <span className="self-center text-2xl font-semibold whitespace-nowrap text-white">EduNext</span>
+          <span className="self-center text-2xl font-semibold whitespace-nowrap text-white">
+            EduNext
+          </span>
         </a>
         <div className="flex items-center md:order-2 space-x-3 md:space-x-0 rtl:space-x-reverse">
-          <button
-            type="button"
-            className="flex text-sm bg-gray-800 rounded-full focus:ring-4 focus:ring-gray-600"
-            id="user-menu-button"
-            onClick={toggleDropdown}
-          >
-            <span className="sr-only">Open user menu</span>
-            <img
-              className="w-8 h-8 rounded-full"
-              src="https://img.freepik.com/premium-vector/businessman-avatar-illustration-cartoon-user-portrait-user-profile-icon_118339-4394.jpg?w=740"
-              alt="user photo"
-            />
-          </button>
-
-          {isDropdownOpen && (
-            <div
-              className="absolute z-50 mt-80 pr-6    text-base  rounded-lg shadow bg-gray-700 divide-gray-600" id="user-dropdown"
+          <div className="relative flex" ref={dropdownRef}>
+            <button
+              type="button"
+              className="flex text-sm bg-gray-800 rounded-full focus:ring-4 focus:ring-gray-600"
+              id="user-menu-button"
+              onClick={toggleDropdown}
             >
-              <div className="px-4 py-3">
-                <span className="block text-sm text-gray-900 dark:text-white">UserName</span>
-                <span className="block text-sm text-gray-500 truncate dark:text-gray-400">
-                  User@gmail.com
-                </span>
+              <span className="sr-only">Open user menu</span>
+              <img
+                className="w-8 h-8 rounded-full"
+                src="https://img.freepik.com/premium-vector/businessman-avatar-illustration-cartoon-user-portrait-user-profile-icon_118339-4394.jpg?w=740"
+                alt="user photo"
+              />
+            </button>
+            
+            
+
+            {isDropdownOpen && user && (
+              <div
+                className="absolute top-8 mt-2 w-48 bg-gray-700 text-white rounded-lg shadow-lg"
+                id="user-dropdown"
+              >
+                <div className="px-4 py-3">
+                  <span className="block text-sm font-medium">
+                    {user.fullName === null ? user.username: user.fullName} 
+                  </span>
+                  <span className="block text-sm text-gray-400">
+                    {user.emailAddresses[0].emailAddress}
+                  </span>
+                </div>
+                <ul className="py-2">
+                  {userItems.map((item, index) => (
+                    <li key={index}>
+                      <a
+                        href="/"
+                        className="block px-4 py-2 text-sm hover:bg-gray-600"
+                      >
+                        {item}
+                      </a>
+                    </li>
+                  ))}
+                </ul>
+                <div className="px-4 py-3 -mt-2 text-sm hover:bg-gray-600 block hover:rounded-lg">
+                  <SignOutButton />
+                </div>
               </div>
-              <ul className="py-2" aria-labelledby="user-menu-button">
-                {userItems.map((item, index) => (
-                  <li key={index}>
-                    <a
-                      href="/"
-                      className="block px-4 py-2 text-sm text-gray-700 hover:bg-gray-100 dark:hover:bg-gray-600 dark:text-gray-200 dark:hover:text-white"
-                    >
-                      {item}
-                    </a>
-                  </li>
-                ))}
-              </ul>
+            )}
+          </div>
+
+          {!user && (
+            <SignInButton className="text-white md:hover:text-blue-500 pl-3" />
+          )}
+          {user && (
+            <div className="px-4 py-3  text-sm  text-white ">
+              {user.fullName === null ? user.username: user.fullName} 
             </div>
           )}
+
           <button
             onClick={toggleMobileMenu}
             data-collapse-toggle="navbar-user"
