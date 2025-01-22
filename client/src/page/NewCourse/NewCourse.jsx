@@ -1,5 +1,6 @@
+/* eslint-disable react-hooks/rules-of-hooks */
 /* eslint-disable no-unused-vars */
-import React, { useState } from "react";
+import React, { useState ,useEffect} from "react";
 import { useForm, Controller } from "react-hook-form";
 import { motion } from "framer-motion";
 import axios from 'axios';
@@ -7,9 +8,9 @@ import { useClerk } from "@clerk/clerk-react";
 
 
 const MultiStepCourseForm = () => {
+
   
-  //User Details
-  const { user } = useClerk();
+  const {  isSignedIn, user } = useClerk(); 
   
   const date = new Date();
 
@@ -24,12 +25,20 @@ const MultiStepCourseForm = () => {
       Course_skills:"",
       Course_description: "",
       Course_sections: [{ module_Title : "", module_Desc : "" , module_VideoUrl : "" }],
-      AuthorName : user.fullName || user.username || "UnKnown User",
-      PublishedDate : date.toLocaleDateString()
-      
+      AuthorName : "",
+      PublishedDate : date.toLocaleDateString(),
+      organizationName: "",
+      individualName: "",
     },
   });
+  
 
+  useEffect(() => {
+    if (user) {
+      const authorName = user?.fullName || user?.username || "Unknown Author";
+      setValue("AuthorName", authorName);
+    }
+  }, [user, setValue]);
   
   const courseData = watch();
 
@@ -73,6 +82,7 @@ const MultiStepCourseForm = () => {
 
   const progress = ((currentStep ) / steps.length) * 100;
 
+  
   return (
     <div className="flex max-w-screen min-h-screen bg-slate-100 p-8 rounded-lg">
       <form
@@ -150,7 +160,7 @@ const MultiStepCourseForm = () => {
                       }
                     }}
                   >
-                    <option value="Choose an option" disabled >Choose an option</option>
+                    <option value="Choose an option" >Choose an option</option>
                     <option value="Development">Development</option>
                     <option value="Business">Business</option>
                     <option value="Finance & Accounting">Finance & Accounting</option>
@@ -158,6 +168,87 @@ const MultiStepCourseForm = () => {
                     <option value="Design and Marketing">Design and Marketing</option>
                     <option value="LifeStyle & Health">LifeStyle & Health</option>
                   </select>
+                  )}
+                />
+              </div>
+              <div className="mb-4">
+                <label className="block text-lg font-medium text-gray-700 mb-2">Is this a Industry-Endorsed Cource </label>
+                
+                <Controller
+                  name="Course_industry_endorsed"
+                  control={control}
+                  render={({ field }) => (
+                    <div>
+                      <select
+                        id="Course_industry_endorsed"
+                        {...field}
+                        className="block w-full p-2 bg-gray-100 border-2 rounded focus:outline-none focus:border-gray-300"
+                        onChange={(e) => {
+                          const value = e.target.value;
+                          setValue("Course_industry_endorsed", value);
+                          if (value === "Yes") {
+                            setValue("individualName", ""); 
+                          } else if (value === "No") {
+                            setValue("organizationName", ""); 
+                          }
+                        }}
+                        required
+                      >
+                        <option value="Choose an option">Choose an option</option>
+                        <option value="Yes">Yes</option>
+                        <option value="No">No</option>
+                      </select>
+                      {field.value === "Yes" && (
+                        <div className="mt-4">
+                        <label
+                            htmlFor="organizationName"
+                            className="block text-sm font-medium text-gray-700"
+                        >
+                            Organization Name
+                        </label>
+                        <Controller
+                          name="organizationName"
+                          control={control}
+                          render={({ field }) => (
+                            
+                            <input
+                              id="organizationName"
+                              {...field}
+                              type="text"
+                              className="block w-full p-2 mt-1 bg-gray-100 border-2 rounded focus:outline-none focus:border-gray-300"
+                              placeholder="Enter Organization Name"
+                              required
+                            />
+                          )}
+                        />
+                        </div>
+                      )}
+                      {field.value === "No" && (
+                        <div className="mt-4">
+                          <label
+                              htmlFor="IndividualName"
+                              className="block text-sm font-medium text-gray-700"
+                          >
+                              Individual Publication Name
+                          </label>
+                          <Controller
+                          name="individualName"
+                          control={control}
+                          render={({ field }) => (
+                            <input
+                              id="individualName"
+                              {...field}
+                              type="text"
+                              className="block w-full p-2 mt-1 bg-gray-100 border-2 rounded focus:outline-none focus:border-gray-300"
+                              placeholder="Enter Publication Name"
+                              required
+                            />
+                          )}
+                        />
+                        </div> 
+                        
+                      )}
+                    </div>
                   )}
                 />
               </div>
@@ -313,6 +404,7 @@ const MultiStepCourseForm = () => {
               <p>
                 <strong>Category:</strong> {courseData.Course_category}
               </p>
+              <p><strong>Industry Endorsed: </strong>{courseData.organizationName=="" ? courseData.individualName : courseData.organizationName}</p>
               <p>
                 <strong>Price:</strong> {courseData.Course_price}
               </p>
